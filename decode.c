@@ -90,13 +90,17 @@ main(int argc, char** argv)
 	for( int i=0; i<8; i++ ) 
 	  val_u64 |= ((unsigned long)(buf[i])&0xff)<<(i*8ULL);
 
-	printf("%02x : %02x%02x %02x%02x %02x%02x %02x%02x\t0x%08llx\n",
+        // alternatively, cast
+	unsigned long cast_u64 = *((unsigned long *)(&(buf[0])));
+
+	printf("%02x : %02x%02x %02x%02x %02x%02x %02x%02x\t0x%08llx\t0x%08llx\n",
 	       wrdrd,
 	       0xff&buf[7], 0xff&buf[6],
 	       0xff&buf[5], 0xff&buf[4],
 	       0xff&buf[3], 0xff&buf[2],
 	       0xff&buf[1], 0xff&buf[0],
-	       val_u64);
+	       val_u64,
+	       cast_u64);
       }
       printf("   -- data end -- \n\n\n");
 
