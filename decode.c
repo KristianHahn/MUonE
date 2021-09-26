@@ -3,6 +3,8 @@
 #include <sys/types.h>
 
 /*
+ Run as : ./decode <input file> 
+  
  File format in 64b words : 
   header 0
   payload 0 : word 0
