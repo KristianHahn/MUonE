@@ -60,9 +60,9 @@ main(int argc, char** argv)
       unsigned run = (((unsigned)(buf[5])) << 4)&0xff0  |
 	((unsigned)(buf[4])>>4)&0xf;
       unsigned long seq = ((unsigned long)buf[0])&0xff |
-	((unsigned long)buf[1]<<8)&0xff00 |
-	((unsigned long)buf[2]<<16)&0xff0000 |
-	((unsigned long)buf[3]<<24)&0xff000000 |
+	((unsigned long)(buf[1])<<8)&0xff00 |
+	((unsigned long)(buf[2])<<16)&0xff0000 |
+	((unsigned long)(buf[3])<<24)&0xff000000 |
 	((unsigned long)(buf[4])<<32)&0xf00000000 ;
       
       printf( "\thdrcode  : 0x%2x\n",      code);
@@ -84,12 +84,19 @@ main(int argc, char** argv)
       printf("\n   -- data start -- \n");
       for( int wrdrd=0; wrdrd<pktlen; wrdrd++ ) {  
 	fread(buf,1,8,f);
-	printf("%02x : %02x%02x %02x%02x %02x%02x %02x%02x\n",
+
+	// conversion to unsigned 
+	unsigned long val_u64 = 0;
+	for( int i=0; i<8; i++ ) 
+	  val_u64 |= ((unsigned long)(buf[i])&0xff)<<(i*8ULL);
+
+	printf("%02x : %02x%02x %02x%02x %02x%02x %02x%02x\t0x%08llx\n",
 	       wrdrd,
 	       0xff&buf[7], 0xff&buf[6],
 	       0xff&buf[5], 0xff&buf[4],
 	       0xff&buf[3], 0xff&buf[2],
-	       0xff&buf[1], 0xff&buf[0]);
+	       0xff&buf[1], 0xff&buf[0],
+	       val_u64);
       }
       printf("   -- data end -- \n\n\n");
 
